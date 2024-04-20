@@ -15,20 +15,27 @@ const EmployeeComponent = () => {
 
     const navigator = useNavigate();
 
-    useEffect(() => {
-
-        if(id){
-            getEmployee(id).then((response) => {
-                setFirstName(response.data.firstName);
-                setLastName(response.data.lastName);
-                setEmail(response.data.email);
-            }).catch(error => {
-                console.log(error);
-            })
-        }
-    })
-
     const {id} = useParams();
+
+    useEffect(() => {
+        if(id){
+            getEmployee(id)
+                .then((response) => {
+                    setFirstName(response.data.firstName);
+                    setLastName(response.data.lastName);
+                    setEmail(response.data.email);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        } else {
+            // Reset form fields when id is not present (i.e., when adding new employee)
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+        }
+    }, [id]); // Add id as a dependency to useEffect
+
     function saveOrUpdateEmployee(e){
         e.preventDefault();
 
@@ -60,27 +67,27 @@ const EmployeeComponent = () => {
         let valid = true;
         const errorCopy = {... errors};
 
-        if(firstName.trim()){
+        if (firstName.trim()) {
             errorCopy.firstName = '';
         } else {
             errorCopy.firstName = 'First name is required';
             valid = false;
         }
 
-        if(lastName.trim()){
+        if (lastName.trim()) {
             errorCopy.lastName = '';
-            valid = false;
         } else {
             errorCopy.lastName = 'Last name is required';
+            valid = false; // Set valid to false only when lastName is empty
         }
 
-        if(email.trim()){
+        if (email.trim()) {
             errorCopy.email = '';
         } else {
             errorCopy.email = 'Email is required';
             valid = false;
         }
-        setError(errorCopy)
+        setError(errorCopy);
         return valid;
     }
 

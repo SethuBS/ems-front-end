@@ -4,7 +4,7 @@ function FooterComponent(props) {
     return (
         <div>
             <footer className="footer">
-                <span>All rights reserved 2024 by Sethu</span>
+                &copy; {new Date().getFullYear()} by Sethu
             </footer>
         </div>
     );
